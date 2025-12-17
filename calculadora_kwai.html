@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculadora Kwai CUT</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom right, #000000, #262626);
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: rgba(255,255,255,0.08);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        input, button {
+            padding: 10px;
+            width: 80%;
+            margin-top: 10px;
+            border-radius: 10px;
+            border: none;
+            font-size: 16px;
+        }
+        input {
+            background: #eee;
+        }
+        button {
+            background: #ff9100;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #ff7300;
+        }
+        .viewsBox input {
+            width: 70%;
+        }
+        .viewsBox {
+            margin-top: 10px;
+        }
+        #resultado {
+            font-size: 20px;
+            margin-top: 20px;
+            font-weight: bold;
+            color: #00ff66;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>💰 Calculadora Kwai CUT</h1>
+    <p>Ganhos estimados usando R$ 0,11 por 1.000 views</p>
+
+    <div class="container">
+
+        <label>Quantos vídeos você quer calcular?</label><br>
+        <input type="number" id="qtdVideos" placeholder="Ex: 5" min="1" />
+
+        <button onclick="criarCampos()">Confirmar</button>
+
+        <form id="formViews"></form>
+
+        <button onclick="calcular()">Calcular ganhos</button>
+
+        <div id="resultado"></div>
+
+    </div>
+
+<script>
+    const valorPorMil = 0.11;
+
+    function criarCampos() {
+        let qtd = document.getElementById("qtdVideos").value;
+        let form = document.getElementById("formViews");
+
+        form.innerHTML = ""; 
+
+        for (let i = 1; i <= qtd; i++) {
+            form.innerHTML += `
+                <div class="viewsBox">
+                    <label>Views do vídeo ${i}:</label><br>
+                    <input type="number" id="video${i}" placeholder="Ex: 6000" min="0" />
+                </div>
+            `;
+        }
+    }
+
+    function calcular() {
+        let qtd = document.getElementById("qtdVideos").value;
+        let totalViews = 0;
+
+        for (let i = 1; i <= qtd; i++) {
+            let views = Number(document.getElementById(`video${i}`).value);
+            totalViews += views;
+        }
+
+        let ganho = (totalViews / 1000) * valorPorMil;
+
+        document.getElementById("resultado").innerHTML = `
+            📌 Total de views: <b>${totalViews}</b><br>
+            💵 Ganho estimado: <b>R$ ${ganho.toFixed(2)}</b>
+        `;
+    }
+</script>
+
+</body>
+</html>
