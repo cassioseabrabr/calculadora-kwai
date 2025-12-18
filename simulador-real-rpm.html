@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>📊 Detectar RPM Real</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom right, #000000, #262626);
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: rgba(255,255,255,0.08);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        input, button {
+            padding: 10px;
+            width: 80%;
+            margin-top: 10px;
+            border-radius: 10px;
+            border: none;
+            font-size: 16px;
+        }
+        input {
+            background: #eee;
+        }
+        button {
+            background: #ff9100;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #ff7300;
+        }
+        #resultado {
+            font-size: 22px;
+            margin-top: 20px;
+            font-weight: bold;
+            color: #00ff66;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>📊 Descobrir RPM Real</h1>
+    <p>Informe seus dados reais para descobrir seu RPM verdadeiro</p>
+
+    <div class="container">
+
+        <input type="number" id="views" placeholder="Views totais" />
+        <input type="number" id="ganhos" placeholder="Ganhos totais (R$)" step="0.01" />
+
+        <button onclick="calcular()">Calcular RPM Real</button>
+
+        <div id="resultado"></div>
+    </div>
+
+<script>
+function calcular() {
+    let views = Number(document.getElementById("views").value);
+    let ganhos = Number(document.getElementById("ganhos").value);
+
+    if (views < 1 || ganhos <= 0) {
+        document.getElementById("resultado").innerHTML = "Preencha os valores!";
+        return;
+    }
+
+    let rpm = ganhos / (views / 1000);
+
+    let nivel = "";
+    if (rpm < 0.12) nivel = "Baixa qualidade";
+    else if (rpm < 0.22) nivel = "Média qualidade";
+    else nivel = "Alta qualidade";
+
+    document.getElementById("resultado").innerHTML = `
+        📌 RPM real: <b>R$ ${rpm.toFixed(3)}</b><br><br>
+        ⭐ Classificação: <b>${nivel}</b>
+    `;
+}
+</script>
+
+</body>
+</html>
