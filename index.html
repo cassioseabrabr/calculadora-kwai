@@ -21,7 +21,7 @@
             border-radius: 15px;
             border: 1px solid rgba(255,255,255,0.2);
         }
-        input, button {
+        input, button, select {
             padding: 10px;
             width: 80%;
             margin-top: 10px;
@@ -53,15 +53,20 @@
             font-weight: bold;
             color: #00ff66;
         }
-        .menu button {
-            width: 100%;
-        }
     </style>
 </head>
 <body>
 
     <h1>💰 Calculadora Kwai CUT</h1>
     <p>Ganhos estimados usando R$ 0,11 por 1.000 views</p>
+
+    <div style="text-align:center; margin:15px auto;">
+        <select id="qualidade" onchange="salvarRPM()" style="padding:6px; width:auto; font-size:12px; border-radius:6px; background:#ff9100; color:white; cursor:pointer; border:none;">
+            <option value="0.095">RPM Baixo</option>
+            <option value="0.175">RPM Médio</option>
+            <option value="0.275">RPM Alto</option>
+        </select>
+    </div>
 
     <!-- ⚠️ ALERTA IMPORTANTE -->
     <div style="
@@ -73,11 +78,12 @@
         font-size:14px;
         border:1px solid rgba(255,255,255,0.15);
         line-height:20px;">
-        ⚠️ <b>Atenção:</b> o valor de R$ 0,11 por 1.000 views é baseado em perfis de qualidade baixa.  
+        ⚠️ <b>Atenção:</b> o valor de R$ 0,11 por 1.000 views é baseado em perfis de qualidade baixa.
         O RPM real pode variar de <b>R$ 0,08 até R$ 0,29</b> dependendo do engajamento do perfil.
     </div>
 
-    <!-- NOVO MENU -->
+    <!-- MENU RESTAURADO -->
+    <!-- MENU ORIGINAL RESTAURADO -->
     <div class="container menu">
         <button onclick="window.location.href='simulador-anual.html'">📌 Simulador Anual</button>
         <button onclick="window.location.href='simulador-meta-diaria.html'">📌 Meta Diária</button>
@@ -89,10 +95,17 @@
     </div>
     <br>
 
-    <div class="container">
+    <!-- MENU RPM PEQUENO NO CANTO -->
+    <div style="text-align:center; margin:15px auto;">
+        <select id="qualidade" style="padding:6px; width:auto; font-size:12px; border-radius:6px; background:#ff9100; color:white; cursor:pointer; border:none;">
+            <option value="0.095">RPM Baixo</option>
+            <option value="0.175">RPM Médio</option>
+            <option value="0.275">RPM Alto</option>
+        </select>
+    </div>
+    <br><br>
 
-        <label>Quantos vídeos você quer calcular?</label><br>
-        <input type="number" id="qtdVideos" placeholder="Ex: 5" min="1" />
+    <div class="container">
 
         <button onclick="criarCampos()">Confirmar</button>
 
@@ -105,7 +118,10 @@
     </div>
 
 <script>
-    const valorPorMil = 0.11;
+
+    function getRPM() {
+        return Number(document.getElementById('qualidade').value);
+    }
 
     function criarCampos() {
         let qtd = document.getElementById("qtdVideos").value;
@@ -132,12 +148,15 @@
             totalViews += views;
         }
 
-        let ganho = (totalViews / 1000) * valorPorMil;
+        let ganho = (totalViews / 1000) * getRPM();
 
         document.getElementById("resultado").innerHTML = `
             📌 Total de views: <b>${totalViews}</b><br>
             💵 Ganho estimado: <b>R$ ${ganho.toFixed(2)}</b>
         `;
+    }
+function salvarRPM() {
+        localStorage.setItem("rpm_kwai", document.getElementById("qualidade").value);
     }
 </script>
 

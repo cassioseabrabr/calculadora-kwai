@@ -1,91 +1,107 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Simulador Meta Diária por Vídeo - Kwai CUT</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meta Diária com Vídeos - Kwai CUT</title>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 400px;
-      margin: 40px auto;
-      padding: 20px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-    }
-    h2 {
-      text-align: center;
-    }
-    label {
-      display: block;
-      margin-top: 15px;
-    }
-    input {
-      width: 100%;
-      padding: 10px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      margin-top: 5px;
-      font-size: 16px;
-    }
-    button {
-      width: 100%;
-      padding: 12px;
-      margin-top: 20px;
-      border: none;
-      border-radius: 5px;
-      background-color: #ff9900;
-      color: #fff;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    #resultado {
-      margin-top: 20px;
-      text-align: center;
-      font-size: 20px;
-      font-weight: bold;
-    }
-  </style>
-
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom right, #000000, #262626);
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: rgba(255,255,255,0.08);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        input, button {
+            padding: 10px;
+            width: 80%;
+            margin-top: 10px;
+            border-radius: 10px;
+            border: none;
+            font-size: 16px;
+        }
+        input {
+            background: #eee;
+        }
+        button {
+            background: #ff9100;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #ff7300;
+        }
+        #resultado {
+            font-size: 20px;
+            margin-top: 20px;
+            font-weight: bold;
+            color: #00ff66;
+        }
+    </style>
 </head>
 <body>
 
-  <h2>Simulador Meta Diária por Vídeo</h2>
+    <h1>🎯 Meta Diária com Vídeos</h1>
 
-  <label>Quanto quer ganhar por dia?</label>
-  <input type="number" id="metaDia" placeholder="Ex: 70">
+    <p>Descubra quantas views cada vídeo precisa fazer para atingir sua meta diária!</p>
 
-  <label>Quantos vídeos posta por dia?</label>
-  <input type="number" id="videosDia" placeholder="Ex: 3">
+    <div class="container">
 
-  <button onclick="simularMetaDiaPorVideo()">Calcular</button>
+        <label>Quanto deseja ganhar por dia?</label><br>
+        <input type="number" id="meta" placeholder="Ex: 50" min="0">
 
-  <div id="resultado">
-    <p id="viewsTotaisDia"></p>
-    <p id="viewsPorVideoDia"></p>
-  </div>
+        <label>Quantos vídeos você posta por dia?</label><br>
+        <input type="number" id="videos" placeholder="Ex: 5" min="1">
 
-  <button onclick="window.location.href='index.html'">Voltar</button>
+        <button onclick="calcular()">Calcular Meta</button>
 
-  <script>
-    function simularMetaDiaPorVideo() {
+        <div id="resultado"></div>
 
-      let metaDia = parseFloat(document.getElementById('metaDia').value);
-      let videosDia = parseFloat(document.getElementById('videosDia').value);
+        <br>
+        <button onclick="window.location.href='index.html'">⬅️ Voltar</button>
 
-      let rpm = 0.11;
+    </div>
 
-      let viewsDiaTotal = (metaDia / rpm) * 1000;
-      let viewsPorVideo = viewsDiaTotal / videosDia;
+<script>
 
-      document.getElementById('viewsTotaisDia').innerHTML =
-        "📌 Views necessárias no dia: " + Math.round(viewsDiaTotal).toLocaleString("pt-br") + " views";
-
-      document.getElementById('viewsPorVideoDia').innerHTML =
-        "📌 Views necessárias por vídeo: " + Math.round(viewsPorVideo).toLocaleString("pt-br") + " views";
+    function getRPM() {
+        return Number(localStorage.getItem("kwaiRPM") || 0.11);
     }
-  </script>
+
+    function calcular() {
+
+        let meta = Number(document.getElementById('meta').value);
+        let videos = Number(document.getElementById('videos').value);
+
+        if (meta === 0 || videos === 0) {
+            document.getElementById('resultado').innerHTML = "Preencha os campos corretamente.";
+            return;
+        }
+
+        let rpm = getRPM();
+
+        let viewsNecessariasTotal = (meta / rpm) * 1000;
+        let viewsPorVideo = viewsNecessariasTotal / videos;
+
+        document.getElementById('resultado').innerHTML = 
+            "📌 Para ganhar <b>R$ " + meta.toFixed(2).replace(".", ",") + "</b> por dia,<br>" +
+            "postando <b>" + videos + "</b> vídeos por dia,<br><br>" +
+            "🔥 Cada vídeo precisa de aproximadamente:<br>" +
+            "<b style='color:#00ffea; font-size:24px;'>" + Math.round(viewsPorVideo).toLocaleString('pt-BR') + " views</b><br><br>" +
+            "💡 RPM usado: <b>R$ " + rpm.toFixed(3).replace(".", ",") + "</b>";
+    }
+
+</script>
 
 </body>
 </html>

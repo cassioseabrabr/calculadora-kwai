@@ -1,81 +1,100 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador por Views - Kwai CUT</title>
+    <title>Ganhos por Views - Kwai CUT</title>
 
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 400px;
-            margin: 40px auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-        }
-        h2 {
+            background: linear-gradient(to bottom right, #000000, #262626);
             text-align: center;
+            color: white;
+            padding: 20px;
         }
-        label {
-            display: block;
-            margin-top: 15px;
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: rgba(255,255,255,0.08);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        input, button {
+            padding: 10px;
+            width: 80%;
+            margin-top: 10px;
+            border-radius: 10px;
+            border: none;
+            font-size: 16px;
         }
         input {
-            width: 100%;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            margin-top: 5px;
-            font-size: 16px;
+            background: #eee;
         }
         button {
-            width: 100%;
-            padding: 12px;
-            margin-top: 20px;
-            border: none;
-            border-radius: 5px;
-            background-color: #ff9900;
-            color: #fff;
-            font-size: 16px;
+            background: #ff9100;
+            color: white;
+            font-weight: bold;
             cursor: pointer;
         }
+        button:hover {
+            background: #ff7300;
+        }
         #resultado {
-            margin-top: 20px;
-            text-align: center;
             font-size: 20px;
+            margin-top: 20px;
             font-weight: bold;
+            color: #00ff66;
         }
     </style>
-
 </head>
-
 <body>
 
-    <h2>Simulador de Ganhos por Views</h2>
+    <h1>📊 Ganho por Views Kwai CUT</h1>
 
-    <label>Insira o número de views:</label>
-    <input type="number" id="views" placeholder="Ex: 20000">
+    <p>Insira o número total de views e veja quanto pode ganhar!</p>
 
-    <button onclick="simular()">Calcular</button>
+    <div class="container">
 
-    <div id="resultado">
-        <p id="valor"></p>
+        <label>Total de views recebidas:</label><br>
+        <input type="number" id="views" placeholder="Ex: 10000" min="0">
+
+        <button onclick="calcular()">Calcular Ganhos</button>
+
+        <div id="resultado"></div>
+
+        <br>
+        <button onclick="window.location.href='index.html'">⬅️ Voltar</button>
+
     </div>
 
-    <button onclick="window.location.href='index.html'">Voltar</button>
+<script>
 
-    <script>
-        function simular() {
+    function getRPM() {
+        return Number(localStorage.getItem("kwaiRPM") || 0.11);
+    }
 
-            let views = parseFloat(document.getElementById('views').value);
+    function calcular() {
 
-            let ganho = (views / 1000) * 0.11;
+        let views = Number(document.getElementById('views').value);
 
-            document.getElementById('valor').innerHTML =
-                "📌 Ganho estimado: R$ " + ganho.toFixed(2).replace(".", ",");
+        if (views === 0) {
+            document.getElementById('resultado').innerHTML = "Digite um valor válido.";
+            return;
         }
-    </script>
+
+        let rpm = getRPM();
+        let ganho = (views / 1000) * rpm;
+
+        document.getElementById('resultado').innerHTML = 
+            "📌 Total de views: <b>" + views.toLocaleString('pt-BR') + "</b><br><br>" +
+            "💰 Ganho estimado: <b style='color:#00ffea; font-size:24px;'>R$ " + ganho.toFixed(2).replace(".", ",") + 
+            "</b><br><br>" +
+            "💡 RPM usado: <b>R$ " + rpm.toFixed(3).replace(".", ",") + "</b>";
+    }
+
+</script>
 
 </body>
 </html>
