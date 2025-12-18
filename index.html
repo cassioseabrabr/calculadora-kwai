@@ -53,15 +53,31 @@
             font-weight: bold;
             color: #00ff66;
         }
+        .menu button {
+            width: 100%;
+        }
     </style>
 </head>
 <body>
 
+<script>
+if (!localStorage.getItem("kwaiRPM")) {
+    localStorage.setItem("kwaiRPM", 0.11);
+}
+</script>
+
     <h1>💰 Calculadora Kwai CUT</h1>
     <p>Ganhos estimados usando R$ 0,11 por 1.000 views</p>
 
-    <div style="text-align:center; margin:15px auto;">
-        <select id="qualidade" onchange="salvarRPM()" style="padding:6px; width:auto; font-size:12px; border-radius:6px; background:#ff9100; color:white; cursor:pointer; border:none;">
+    <!-- SELETOR DE RPM -->
+    <div style="
+        max-width:500px;
+        margin:10px auto;
+        background:rgba(255,255,255,0.15);
+        padding:10px;
+        border-radius:10px;">
+        
+        <select id="qualidade" style="width:60%; font-weight:bold;">
             <option value="0.095">RPM Baixo</option>
             <option value="0.175">RPM Médio</option>
             <option value="0.275">RPM Alto</option>
@@ -82,8 +98,7 @@
         O RPM real pode variar de <b>R$ 0,08 até R$ 0,29</b> dependendo do engajamento do perfil.
     </div>
 
-    <!-- MENU RESTAURADO -->
-    <!-- MENU ORIGINAL RESTAURADO -->
+    <!-- MENU -->
     <div class="container menu">
         <button onclick="window.location.href='simulador-anual.html'">📌 Simulador Anual</button>
         <button onclick="window.location.href='simulador-meta-diaria.html'">📌 Meta Diária</button>
@@ -95,17 +110,11 @@
     </div>
     <br>
 
-    <!-- MENU RPM PEQUENO NO CANTO -->
-    <div style="text-align:center; margin:15px auto;">
-        <select id="qualidade" style="padding:6px; width:auto; font-size:12px; border-radius:6px; background:#ff9100; color:white; cursor:pointer; border:none;">
-            <option value="0.095">RPM Baixo</option>
-            <option value="0.175">RPM Médio</option>
-            <option value="0.275">RPM Alto</option>
-        </select>
-    </div>
-    <br><br>
-
+    <!-- CALCULADORA PRINCIPAL -->
     <div class="container">
+
+        <label>Quantos vídeos você quer calcular?</label><br>
+        <input type="number" id="qtdVideos" placeholder="Ex: 5" min="1" />
 
         <button onclick="criarCampos()">Confirmar</button>
 
@@ -119,45 +128,50 @@
 
 <script>
 
-    function getRPM() {
-        return Number(document.getElementById('qualidade').value);
-    }
+document.getElementById("qualidade").addEventListener("change", function() {
+    let rpmSelecionado = Number(this.value);
+    localStorage.setItem("kwaiRPM", rpmSelecionado);
+});
 
-    function criarCampos() {
-        let qtd = document.getElementById("qtdVideos").value;
-        let form = document.getElementById("formViews");
+function getRPM() {
+    return Number(localStorage.getItem("kwaiRPM") || 0.11);
+}
 
-        form.innerHTML = ""; 
+function criarCampos() {
+    let qtd = document.getElementById("qtdVideos").value;
+    let form = document.getElementById("formViews");
 
-        for (let i = 1; i <= qtd; i++) {
-            form.innerHTML += `
-                <div class="viewsBox">
-                    <label>Views do vídeo ${i}:</label><br>
-                    <input type="number" id="video${i}" placeholder="Ex: 6000" min="0" />
-                </div>
-            `;
-        }
-    }
+    form.innerHTML = ""; 
 
-    function calcular() {
-        let qtd = document.getElementById("qtdVideos").value;
-        let totalViews = 0;
-
-        for (let i = 1; i <= qtd; i++) {
-            let views = Number(document.getElementById(`video${i}`).value);
-            totalViews += views;
-        }
-
-        let ganho = (totalViews / 1000) * getRPM();
-
-        document.getElementById("resultado").innerHTML = `
-            📌 Total de views: <b>${totalViews}</b><br>
-            💵 Ganho estimado: <b>R$ ${ganho.toFixed(2)}</b>
+    for (let i = 1; i <= qtd; i++) {
+        form.innerHTML += `
+            <div class="viewsBox">
+                <label>Views do vídeo ${i}:</label><br>
+                <input type="number" id="video${i}" placeholder="Ex: 6000" min="0" />
+            </div>
         `;
     }
-function salvarRPM() {
-        localStorage.setItem("rpm_kwai", document.getElementById("qualidade").value);
+}
+
+function calcular() {
+    let qtd = document.getElementById("qtdVideos").value;
+    let totalViews = 0;
+
+    for (let i = 1; i <= qtd; i++) {
+        let views = Number(document.getElementById(`video${i}`).value);
+        totalViews += views;
     }
+
+    let ganho = (totalViews / 1000) * getRPM();
+
+    document.getElementById("resultado").innerHTML = `
+        📌 Total de views: <b>${totalViews}</b><br>
+        💵 Ganho estimado: <b>R$ ${ganho.toFixed(2)}</b>
+        <br><br>
+        💡 RPM usado: <b>R$ ${getRPM().toFixed(3)}</b>
+    `;
+}
+
 </script>
 
 </body>
