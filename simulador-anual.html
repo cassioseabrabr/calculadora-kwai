@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulador Anual - Kwai CUT</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 400px;
+      margin: 40px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+    h2 {
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      margin-top: 5px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 5px;
+      background-color: #ff9900;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #resultado {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <h2>Simulador Anual de Ganhos</h2>
+
+  <label>Quanto quer ganhar por mês?</label>
+  <input type="number" id="metaMes" placeholder="Ex: 1000">
+
+  <label>Ou quanto quer ganhar por ano?</label>
+  <input type="number" id="metaAno" placeholder="Ex: 12000">
+
+  <button onclick="simularGanhoAnual()">Calcular</button>
+
+  <div id="resultado">
+    <p id="ganhoAno"></p>
+    <p id="ganhoMes"></p>
+    <p id="ganhoDia"></p>
+    <p id="viewsAno"></p>
+    <p id="viewsMes"></p>
+    <p id="viewsDia"></p>
+  </div>
+
+  <button onclick="window.location.href='index.html'">Voltar</button>
+
+  <script>
+    function simularGanhoAnual() {
+
+      let metaMes = parseFloat(document.getElementById('metaMes').value);
+      let metaAno = parseFloat(document.getElementById('metaAno').value);
+
+      let rpm = 0.11;
+
+      if (!metaAno && metaMes) {
+        metaAno = metaMes * 12;
+      }
+      if (!metaMes && metaAno) {
+        metaMes = metaAno / 12;
+      }
+
+      let metaDia = metaAno / 365;
+
+      let viewsAnoTotal = (metaAno / rpm) * 1000;
+      let viewsMesTotal = viewsAnoTotal / 12;
+      let viewsDiaTotal = viewsAnoTotal / 365;
+
+      document.getElementById('ganhoAno').innerHTML =
+        "📌 Ganho anual: R$ " + metaAno.toFixed(2).replace(".", ",");
+
+      document.getElementById('ganhoMes').innerHTML =
+        "📌 Ganho mensal médio: R$ " + metaMes.toFixed(2).replace(".", ",");
+
+      document.getElementById('ganhoDia').innerHTML =
+        "📌 Ganho diário médio: R$ " + metaDia.toFixed(2).replace(".", ",");
+
+      document.getElementById('viewsAno').innerHTML =
+        "📌 Views necessárias por ano: " + Math.round(viewsAnoTotal).toLocaleString("pt-br");
+
+      document.getElementById('viewsMes').innerHTML =
+        "📌 Views necessárias por mês: " + Math.round(viewsMesTotal).toLocaleString("pt-br");
+
+      document.getElementById('viewsDia').innerHTML =
+        "📌 Views necessárias por dia: " + Math.round(viewsDiaTotal).toLocaleString("pt-br");
+
+    }
+  </script>
+
+</body>
+</html>

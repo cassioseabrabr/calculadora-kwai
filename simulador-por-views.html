@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador por Views - Kwai CUT</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 400px;
+            margin: 40px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+        h2 {
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-top: 5px;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff9900;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #resultado {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <h2>Simulador de Ganhos por Views</h2>
+
+    <label>Insira o número de views:</label>
+    <input type="number" id="views" placeholder="Ex: 20000">
+
+    <button onclick="simular()">Calcular</button>
+
+    <div id="resultado">
+        <p id="valor"></p>
+    </div>
+
+    <button onclick="window.location.href='index.html'">Voltar</button>
+
+    <script>
+        function simular() {
+
+            let views = parseFloat(document.getElementById('views').value);
+
+            let ganho = (views / 1000) * 0.11;
+
+            document.getElementById('valor').innerHTML =
+                "📌 Ganho estimado: R$ " + ganho.toFixed(2).replace(".", ",");
+        }
+    </script>
+
+</body>
+</html>
