@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kwai Profile Finder</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to bottom right, #000000, #262626);
+        text-align: center;
+        color: white;
+        padding: 20px;
+    }
+    .container {
+        max-width: 500px;
+        margin: auto;
+        background: rgba(255,255,255,0.08);
+        padding: 20px;
+        border-radius: 15px;
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+    input, button {
+        padding: 10px;
+        width: 80%;
+        margin-top: 10px;
+        border-radius: 10px;
+        border: none;
+        font-size: 16px;
+    }
+    input {
+        background: #eee;
+    }
+    button {
+        background: #ff9100;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    button:hover {
+        background: #ff7300;
+    }
+    .card {
+        background: rgba(255,255,255,0.15);
+        padding: 15px;
+        margin-top: 15px;
+        border-radius: 12px;
+        text-align: left;
+        font-size: 14px;
+    }
+    img {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+</style>
+</head>
+<body>
+
+<h1>🔎 Kwai Profile Finder</h1>
+<p style="font-size:14px;">Digite o nome do perfil que deseja encontrar 🔍</p>
+
+<div class="container">
+
+    <input type="text" id="searchName" placeholder="Ex: maria, joao, paulo" />
+    <button onclick="buscarPerfil()">Buscar Perfil</button>
+
+    <div id="resultado"></div>
+
+</div>
+
+<script>
+
+async function buscarPerfil() {
+
+    const nome = document.getElementById("searchName").value.trim();
+    const div = document.getElementById("resultado");
+
+    if (!nome) {
+        div.innerHTML = "<br>⚠️ Digite um nome ou @arroba";
+        return;
+    }
+
+    div.innerHTML = "<br>⏳ Buscando...";
+
+    try {
+
+        const res = await fetch(
+            `https://kwai4.p.rapidapi.com/search-users?user_name=${nome.replace("@","")}&country=ma&language=en`, 
+            {
+                method: "GET",
+                headers: {
+                    "x-rapidapi-host": "kwai4.p.rapidapi.com",
+                    "x-rapidapi-key": "80748ff71emsh10f193f378897bdp1101b4jsn5e5bf73b4cc4"
+                }
+            }
+        );
+
+        const data = await res.json();
+
+        if (!data || !data.data) {
+            div.innerHTML = "<br>❌ Nenhum perfil encontrado!";
+            return;
+        }
+
+        const lista = data.data.filter(u => 
+            u.user_name.toLowerCase().includes( nome.replace("@","").toLowerCase() )
+        );
+
+        if (lista.length === 0) {
+            div.innerHTML = "<br>❌ Nenhum resultado encontrado!";
+            return;
+        }
+
+        div.innerHTML = "";
+
+        lista.forEach(user => {
+
+            div.innerHTML += `
+            <div class="card">
+                <img src="${user.user_avatar}" />
+                <br><br>
+                👤 Nome: <b>${user.user_name}</b><br>
+                📌 ID: ${user.user_id}<br>
+                🌎 País: ${user.country}
+                <br><br>
+                <button onclick="alert('Em breve estatísticas completas!')">
+                    📊 Ver estatísticas
+                </button>
+            </div>
+            `;
+        });
+
+    } catch (e) {
+        div.innerHTML = "<br>❌ Erro ao conectar com a API!";
+    }
+
+}
+
+</script>
+
+</body>
+</html>
